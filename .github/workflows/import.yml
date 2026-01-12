@@ -11,7 +11,7 @@ jobs:
       - name: Checkout target repo
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.PAT }}
 
       - name: Clone original repository
         run: |
@@ -23,7 +23,7 @@ jobs:
           mkdir newcontent
           rsync -a source/ newcontent/ --ignore-errors --force || true
 
-          # Borrar TODO excepto .git/
+          # Borrar TODO excepto .git/ y newcontent/
           find . -mindepth 1 -maxdepth 1 ! -name ".git" ! -name "newcontent" -exec rm -rf {} +
 
           # Mover el contenido nuevo al repo
@@ -37,5 +37,6 @@ jobs:
           git commit -m "Sync from davidmuma/miEPG" || echo "No changes to commit"
           git push
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PAT }}
+
 
