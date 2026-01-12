@@ -16,11 +16,11 @@ jobs:
       - name: Clone original repository
         run: |
           git clone --depth=1 https://github.com/davidmuma/miEPG.git source
-          rm -rf source/.git   # ← elimina el repo interno para evitar submódulos
+          rm -rf source/.git
 
       - name: Copy files
         run: |
-          rsync -a --delete source/ .
+          rsync -a --delete --ignore-errors --force source/ . || true
 
       - name: Commit and push changes
         run: |
@@ -31,3 +31,4 @@ jobs:
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
