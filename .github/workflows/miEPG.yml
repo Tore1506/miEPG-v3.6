@@ -2,11 +2,11 @@ name: miEPG
 
 on:
   schedule:
-    - cron: '30 11 * * * ' # Ejecutar a las 13:30 AM
+    - cron: '30 11 * * *'   # Ejecutar a las 13:30 hora española
   workflow_dispatch:
 
 permissions:
-   contents: write
+  contents: write
 
 jobs:
   build:
@@ -33,16 +33,18 @@ jobs:
     - name: Ejecutar script
       run: .github/workflows/EPG_script.sh
 
+    - name: Listar archivos generados
+      run: ls -lh .
+
     - name: Configurar identidad de Git
       run: |
         git config user.name "GitHub Actions"
         git config user.email "actions@github.com"
 
-    - name: Subir archivos 
+    - name: Subir archivos
       run: |
         git add miEPG.xml miEPG.xml.gz
-        git commit -m "Actualización de miEPG.xml y miEPG.xml.gz"
+        git commit -m "Actualización automática de miEPG.xml y miEPG.xml.gz"
         git push --force
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
