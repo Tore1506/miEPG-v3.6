@@ -33,8 +33,18 @@ jobs:
     - name: Ejecutar script
       run: .github/workflows/EPG_script.sh
 
+    - name: Comprimir XML generados
+      run: |
+        if [ -f miEPG.xml ]; then
+          gzip -c miEPG.xml > miEPG.xml.gz
+        fi
+
+        if [ -f epg_acumulado.xml ]; then
+          gzip -c epg_acumulado.xml > epg_acumulado.xml.gz
+        fi
+
     - name: Listar archivos generados
-      run: ls -R -lh .
+      run: ls -lh .
 
     - name: Configurar identidad de Git
       run: |
@@ -43,8 +53,9 @@ jobs:
 
     - name: Subir archivos
       run: |
-        git add -A
-        git commit -m "Actualización automática de miEPG.xml y miEPG.xml.gz" || echo "No hay cambios para commitear"
+        git add miEPG.xml miEPG.xml.gz epg_acumulado.xml epg_acumulado.xml.gz
+        git commit -m "Actualización automática de EPG"
         git push --force
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
